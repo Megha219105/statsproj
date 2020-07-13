@@ -1,0 +1,4 @@
+env/
+.vscode/
+/src/process.py
+src/__pycache__/
