@@ -8,8 +8,8 @@ import pydeck
 
 MAPS = {"e": "Educational", "w": "Work"}
 #Colors, increase transparency
-GREEN_RGB = [0, 255, 0, 60]
-RED_RGB = [240, 100, 0, 60]
+GREEN_RGB = [0, 255, 0, 150]
+RED_RGB = [240, 100, 0, 150]
 
 #Get data for a specific requirement 
 

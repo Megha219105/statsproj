@@ -13,7 +13,9 @@ import matplotlib.pyplot as plt
 def get_data():
     '''Get data from the source'''
     dfe = pd.read_csv('travel_to_edu')
+    dfe["Total"] = dfe["Total"] - dfe["Study_at_home"].replace(-999, 0)
     dfw = pd.read_csv('travel_to_work')
+    dfw["Total"] = dfw["Total"] - dfw["Work_at_home"].replace(-999, 0)
     return (dfe, dfw)
 
 
@@ -101,11 +103,8 @@ plt.xlabel("Ways of Commute")
 plt.ylabel("Number of Commutes")
 plt.xticks(rotation=25, fontsize=9, ha="right")
 
-
 st.pyplot()
-#Create bar plot using matplotlib 
-#st.bar_chart(chart_data, width=20, height=500)
-#st.bar_chart(chart_data_to, width=20, height=500)
+
 
 
 
