@@ -33,8 +33,10 @@ commute_for = st.sidebar.selectbox(
 #select the data to use:
 if commute_for == "Work":
     df = MapData(dfw)
+    col_home = "Work_at_home"
 else:
     df = MapData(dfe)
+    col_home = "Study_at_home"
 
 means_of_transport = tuple([x.replace("_", " ") for x in df.getmeans() if "_home" not in x ])
 
@@ -77,13 +79,17 @@ st.markdown("_Bar Chart showing the Commuting from {0} and to {0} for {1}_".form
 df_selected = df.getregiondata(region).replace(-999, 0)
 cols_chart = df.getmeans()
 cols_chart.remove("Total")
+cols_chart.remove(col_home)
+#Get column name for at home: col_home
+df_selected_bar = df_selected[df_selected.columns[~df_selected.columns.isin(["Total", col_home])]]
+
 #Melt data Home
-melt_data_fro = df_selected[df_selected.SA2_name_h == region].melt(id_vars=["SA2_name_h"], value_vars=cols_chart, var_name="var_means", value_name="Number of commutes")
+melt_data_fro = df_selected_bar[df_selected_bar.SA2_name_h == region].melt(id_vars=["SA2_name_h"], value_vars=cols_chart, var_name="var_means", value_name="Number of commutes")
 grp_fro = melt_data_fro.groupby(["var_means"], as_index=False).sum()
 grp_fro["Source"] = ["From" for i in range(grp_fro.shape[0])]
 
 #Melt data To
-melt_data_to = df_selected[df_selected.SA2_name_d == region].melt(id_vars=["SA2_name_d"], value_vars=cols_chart, var_name="var_means", value_name="Number of commutes")
+melt_data_to = df_selected_bar[df_selected_bar.SA2_name_d == region].melt(id_vars=["SA2_name_d"], value_vars=cols_chart, var_name="var_means", value_name="Number of commutes")
 grp_to = melt_data_to.groupby(["var_means"], as_index=False).sum()
 grp_to["Source"] = ["To" for i in range(grp_to.shape[0])]
 #Concat the data
@@ -103,6 +109,14 @@ plt.xlabel("Ways of Commute")
 plt.ylabel("Number of Commutes")
 plt.xticks(rotation=25, fontsize=9, ha="right")
 
+st.pyplot()
+
+#Pie chart
+st.markdown("_Pie Chart for {1} preference _".format(region, commute_for))
+df_selected_pie = df_selected[df_selected.columns[df_selected.columns.isin(["Total", col_home])]]
+df_pie = df_selected_pie.sum()
+df_pie.plot.pie(figsize=(5,5), colors = ["green", "red"], labels = [col_home, "Total" ])
+plt.ylabel(" ")
 st.pyplot()
 
 
