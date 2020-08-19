@@ -59,13 +59,16 @@ st.sidebar.markdown('You selected commuting for {0} by {1} in territory {2}'.for
 #Main page
 st.title("There and Back Again")
 st.header("**__Data visualization for New Zealand commuting trends__**")
-st.markdown("**__The following geographical map and bar chart shows the summary of travels to and fro from the selected area__**")
+st.markdown("**__How to use the app__**")
+st.markdown("Start by selecting the purpose of commute, means of transport and territorial region from the sidebar.")
+st.markdown("Then select the area under that territory for its commuting insights below.")
+
 #Select SA area in territory
 region = st.selectbox(
     "Select Area", 
     df.getarea(territory)
 )
-
+st.markdown("Following are the insights for the area {0}".format(region))
 st.markdown("_Geographical Map showing the arc of travel from source(red) to target(green)_")
 
 r = getMap(df, commute_means.replace(" ", "_"), region)
@@ -73,8 +76,7 @@ st.pydeck_chart(r)
 
 st.text(" ")
 
-#Bar chart 
-st.markdown("_Bar Chart showing the Commuting from {0} and to {0} for {1}_".format(region, commute_for))
+
 #Get data for to and fro
 df_selected = df.getregiondata(region).replace(-999, 0)
 cols_chart = df.getmeans()
@@ -103,6 +105,16 @@ chart_data = pd.pivot_table(
     values = "Number of commutes"
 )
 
+#Pie chart
+st.markdown("_Distribution of population for {1} preference for region {0}_".format(region, commute_for))
+df_selected_pie = df_selected[df_selected.columns[df_selected.columns.isin(["Total", col_home])]]
+df_pie = df_selected_pie.sum()
+df_pie.plot.pie(figsize=(7,4), colors = ["green", "red"], labels = [col_home.replace("_", " "), "Total Commutes" ])
+plt.ylabel(" ")
+st.pyplot()
+
+#Bar chart 
+st.markdown("_Bar Chart showing Distribution of Commutes from {0} and to {0} for {1}_".format(region, commute_for))
 chart_data.plot.bar(figsize=(5,6))
 plt.title("Bar Plot for Commuting from and to\n {0}".format(region))
 plt.xlabel("Ways of Commute")
@@ -111,13 +123,7 @@ plt.xticks(rotation=25, fontsize=9, ha="right")
 
 st.pyplot()
 
-#Pie chart
-st.markdown("_Pie Chart for {1} preference _".format(region, commute_for))
-df_selected_pie = df_selected[df_selected.columns[df_selected.columns.isin(["Total", col_home])]]
-df_pie = df_selected_pie.sum()
-df_pie.plot.pie(figsize=(5,5), colors = ["green", "red"], labels = [col_home, "Total" ])
-plt.ylabel(" ")
-st.pyplot()
+
 
 
 
