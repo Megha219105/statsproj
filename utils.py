@@ -23,6 +23,7 @@ def getMap(df, commute_means, region):
     text = "Number of commutes {"+ commute_means + "} <br /> Commute is from {"+ home_col +"} in red to {"+ dest_col + "} location in green"
 
     #get Layer first
+    #For arc layer 
     arc_layer = pydeck.Layer(
     "ArcLayer",
     data=df_selected,
