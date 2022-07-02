@@ -45,7 +45,7 @@ def getMap(df, commute_means, region):
         pitch=45, 
         zoom=12,)
 
-    #Create pydeck (Now)
+    #Create pydeck new comment (Now)
     r = pydeck.Deck(
         map_style='mapbox://styles/mapbox/light-v9', 
         layers = [arc_layer], 
