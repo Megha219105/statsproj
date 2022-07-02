@@ -9,6 +9,7 @@ import pydeck
 MAPS = {"e": "Educational", "w": "Work"}
 #Colors, increase transparency
 #Colors for get map
+#Adding more comments
 GREEN_RGB = [0, 255, 0, 150]
 RED_RGB = [240, 100, 0, 150]
 
